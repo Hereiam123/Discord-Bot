@@ -15,5 +15,8 @@ client.on("ready", () => {
 
 //Message event, and get content
 client.on("message", (message) => {
-  console.log(message.content);
+  console.log(`${message.author.tag} said ${message.content}`);
+  if (message.author.bot) return;
+  message.reply("What's up?");
+  message.channel.send("Nah brah");
 });
