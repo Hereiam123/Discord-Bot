@@ -1,9 +1,14 @@
 require("dotenv").config();
 
 //Discord API
-const { Client } = require("discord.js");
+const { Client, WebhookClient } = require("discord.js");
 
 const client = new Client();
+
+const webhookClient = new WebhookClient(
+  process.env.WEBHOOK_ID,
+  process.env.WEBHOOK_TOKEN
+);
 
 //Command prefix
 const PREFIX = "$";
@@ -64,6 +69,11 @@ client.on("message", (message) => {
         .catch((err) => {
           message.reply("I do not have permissions or there was an error");
         });
+    } else if (CMD_NAME === "announce") {
+      console.log(args);
+      const msg = args.join(" ");
+      console.log(msg);
+      webhookClient.send(msg);
     }
   }
 });
