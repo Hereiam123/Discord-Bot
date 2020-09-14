@@ -70,9 +70,7 @@ client.on("message", (message) => {
           message.reply("I do not have permissions or there was an error");
         });
     } else if (CMD_NAME === "announce") {
-      console.log(args);
       const msg = args.join(" ");
-      console.log(msg);
       webhookClient.send(msg);
     }
   }
