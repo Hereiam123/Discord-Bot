@@ -20,6 +20,7 @@ client.on("ready", () => {
 client.on("message", (message) => {
   console.log(`${message.author.tag} said ${message.content}`);
   if (message.author.bot) return;
+
   //Trigger on command
   if (message.content.startsWith(PREFIX)) {
     const [CMD_NAME, ...args] = message.content
@@ -30,6 +31,7 @@ client.on("message", (message) => {
     //Respond to a kick message, and try to find if user exists
     //If so, kick user
     //Need to provide bot permissions in server for bot to kick
+    //args[0] is memeber to kick/ban
     if (CMD_NAME === "kick") {
       //Reference to user trying to kick
       if (message.member.hasPermission("KICK_MEMBERS")) {
@@ -50,7 +52,11 @@ client.on("message", (message) => {
         message.channel.send("Not a valid member ID");
       }
     } else if (CMD_NAME === "ban") {
-      message.channel.send("Banned a user");
+      if (message.member.hasPermission("BAN_MEMBERS")) {
+        return message.reply("You do not have permissions to use that command");
+      }
+      if (args.length === 0) return message.reply(`Please provide an ID.`);
+      message.guild.members.ban(args[0]);
     }
   }
 });
