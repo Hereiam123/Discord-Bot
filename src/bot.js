@@ -31,10 +31,21 @@ client.on("message", (message) => {
     //If so, kick user
     //Need to provide bot permissions in server for bot to kick
     if (CMD_NAME === "kick") {
+      //Reference to user trying to kick
+      if (message.member.hasPermission("KICK_MEMBERS")) {
+        return message.reply("You do not have permissions to use that command");
+      }
       if (args.length === 0) return message.reply(`Please provide an ID.`);
       const member = message.guild.members.cache.get(args[0]);
       if (member) {
-        member.kick();
+        member
+          .kick()
+          .then((member) => {
+            message.channel.send(`${member} was kicked.`);
+          })
+          .catch((err) => {
+            message.channel.send("I do not have permissions");
+          });
       } else {
         message.channel.send("Not a valid member ID");
       }
